@@ -3,8 +3,8 @@
 template <typename T>
 
 class Sequencia {
-    T capacidade;
-    T tamanho;
+    int capacidade;
+    int tamanho;
     T *dados;
     
     void ajustaCapacidade() {

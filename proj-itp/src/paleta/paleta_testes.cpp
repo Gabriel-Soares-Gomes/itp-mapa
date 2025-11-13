@@ -7,7 +7,6 @@ TEST_CASE("Testa a criação de uma paleta padrão (sem nenhuma cor)") {
     CHECK(paleta.obterTamanho() == 0);
 }
 
-
 TEST_CASE("Testa a adição de cores uma paleta vazia") {
     Paleta paleta;
     paleta.adicionarCor(Cor {255, 0, 0});
@@ -58,5 +57,6 @@ TEST_CASE("Testa a criação de uma paleta a partir de um arquivo inexistente") 
 
     // a paleta deve estar vazia
     CHECK(paleta.obterTamanho() == 0);
+}
 }
 */

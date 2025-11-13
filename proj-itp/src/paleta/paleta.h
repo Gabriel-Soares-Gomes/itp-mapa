@@ -8,9 +8,11 @@ struct Cor{
     int r, g, b;
 };
 
-class Paleta{
+class Paleta {
     Sequencia<Cor> cores;
     int tamanho;
+    
+
 
     Cor stringParaCor(std::string hexa){
         Cor resultado;
@@ -46,8 +48,7 @@ class Paleta{
     }
 
     public:
-
-    Paleta(){
+    Paleta() {
         tamanho = 0;
     }
 
@@ -90,4 +91,18 @@ class Paleta{
 
 
 
+    int obterTamanho() {return tamanho;}
+
+    void adicionarCor(Cor c) {
+        cores.adicionar(c);
+        tamanho++;
+    }
+
+    Cor obterCor(int indice) {
+        if(indice >= tamanho || indice < 0) {
+            Cor corInvalida = {0, 0, 0};
+            return corInvalida;
+        }
+        return cores[indice];
+    }
 };

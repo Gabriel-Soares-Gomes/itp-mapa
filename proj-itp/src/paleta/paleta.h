@@ -56,19 +56,14 @@ class Paleta {
         std::ifstream nomeArquivo(arquivo);
         std::string temp = "";
 
-        Sequencia<Cor> previaPaleta;
-
         if(nomeArquivo.is_open()){
             while(std::getline(nomeArquivo, temp)){
-                previaPaleta.adicionar(stringParaCor(temp));
-                tamanho++;
+                this->adicionarCor(stringParaCor(temp));
             }
         }
         else{
             std::cerr << "Erro ao abrir o arquivo" << std::endl;
         }
-
-        cores = previaPaleta;
 
     }
 
@@ -86,23 +81,5 @@ class Paleta {
             return {0, 0, 0};
         }
         return cores[index];
-    }
-
-
-
-
-    int obterTamanho() {return tamanho;}
-
-    void adicionarCor(Cor c) {
-        cores.adicionar(c);
-        tamanho++;
-    }
-
-    Cor obterCor(int indice) {
-        if(indice >= tamanho || indice < 0) {
-            Cor corInvalida = {0, 0, 0};
-            return corInvalida;
-        }
-        return cores[indice];
     }
 };

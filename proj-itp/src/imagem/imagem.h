@@ -27,6 +27,30 @@ class Matriz{
 };
 
 class Imagem{
-    int largura, altura;
+    int largura;
+    int altura;
     Sequencia<Pixel> pixels;
+
+    public:
+    
+    Imagem(int alt, int larg)
+    {
+        largura = larg;
+        altura = alt;
+    }
+
+    int obterAltura()
+    {
+        return altura;
+    }
+
+    int obterLargura()
+    {
+        return largura;
+    }
+
+    Pixel& operator= (Pixel pixel)
+    {
+        pixels.adicionar(pixel);
+    }
 };

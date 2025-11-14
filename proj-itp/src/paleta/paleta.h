@@ -60,9 +60,6 @@ class Paleta {
                 this->adicionarCor(stringParaCor(temp));
             }
         }
-        else{
-            std::cerr << "Erro ao abrir o arquivo" << std::endl;
-        }
 
     }
 

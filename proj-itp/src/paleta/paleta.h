@@ -50,7 +50,8 @@ class Paleta {
 
     Paleta() = default;
 
-    
+
+
     Paleta(std::string arquivo){
         std::ifstream nomeArquivo(arquivo);
         std::string temp = "";

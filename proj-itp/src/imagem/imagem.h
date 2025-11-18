@@ -1,5 +1,7 @@
 #pragma once
 #include "../paleta/paleta.h"
+#include <fstream>
+#include <string>
 
 
 struct Pixel{
@@ -15,9 +17,10 @@ class Matriz{
     Pixel *valores;
 
     public:
-    Matriz() = default;
+    //Matriz() = default;
 
-    Matriz(int l, int c){
+    Matriz(int l = 1, int c = 1)
+    {
         linhas = l;
         colunas = c;
         valores = new Pixel[l*c];
@@ -31,23 +34,34 @@ class Matriz{
         return (linhas*colunas);
     }
 
+    Pixel& operator[] (int index)
+    {
+        return valores[index];
+    }
+
 };
 
 class Imagem{
     int largura = 1;
     int altura = 1;
+    int maxCor = 1;
     Matriz pixels;
 
     public:
     
     Imagem() = default;
 
-    Imagem(int alt, int larg)
+    Imagem(int larg, int alt)
     {
         largura = larg;
         altura = alt;
     }
 
+    ~Imagem()
+    {
+        //delete[] pixels.
+    }
+    
     int obterAltura()
     {
         return altura;
@@ -62,5 +76,32 @@ class Imagem{
     {
         int indice = (l*altura)+c;
         return pixels[indice];
+    }
+
+    
+    void lerPPMcabecalho(std::string arquivo)
+    {
+        std::ifstream nomeArquivo(arquivo);
+        std::string tipoImagem = "";
+        
+        if (nomeArquivo.is_open())
+        {
+            std::getline(nomeArquivo, tipoImagem);
+            nomeArquivo >> largura >> altura;
+            nomeArquivo >> maxCor;
+            nomeArquivo >> 
+        }
+    }
+
+    void lerPPMcores(std::string arquivo)
+    {
+
+    }
+    
+    
+    bool lerPPM(std::string arquivo)
+    {
+        lerPPMcabecalho(arquivo);
+        lerPPMcores(arquivo);
     }
 };

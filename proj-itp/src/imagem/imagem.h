@@ -2,7 +2,7 @@
 #include "../paleta/paleta.h"
 #include <fstream>
 #include <string>
-
+#include <iostream>
 
 struct Pixel{
     int r, g, b;
@@ -39,10 +39,10 @@ class Matriz{
         return valores[index];
     }
     
-    //Pixel& operator[] (int index)
-    //{
-        //return valores[index];
-    //}
+    /*Pixel& operator[] (int index)
+    {
+        return valores[index];
+    }*/
 
 };
 
@@ -78,35 +78,50 @@ class Imagem{
         return largura;
     }
 
-    Pixel& operator() (int l, int c)
+    Pixel& operator() (int c, int l)
     {
-        int indice = (l*altura)+c;
+        int indice = (l*largura)+c;
         return pixels->obterElemento(indice);
     }
      
+    void redimensionar(int newWidth, int newHeight)
+    {
+        delete pixels;
+        pixels = new Matriz(newWidth, newHeight);
+        largura = newWidth;
+        altura = newHeight;
+    }
+
     bool lerPPM(std::string arquivo)
     {
         std::ifstream filePPM(arquivo);
         if(!filePPM.is_open()) return false;
 
-        std:: string tmp = "";
         std::string tipoPPM = "";
         int alturaPPM, larguraPPM, intensidadeCorPPM;
 
         filePPM >> tipoPPM >> larguraPPM >> alturaPPM >> intensidadeCorPPM;
-        
-        while(std::getline(filePPM, tmp))
+
+        if(alturaPPM != altura || larguraPPM != largura)
         {
-            int cont = 0;
-            for(int i = 0; i < 3; i++)
-            {
-                for(int j = 0; j < 3; j++)
-                {
-                    
-                }
-            }
-            cont++;
-            
+            redimensionar(larguraPPM, alturaPPM);
         }
+
+        //int cont = 0;
+        for(int i = 0; i < alturaPPM;i++)
+        {
+            for(int j = 0; j < larguraPPM; j++)
+            {
+                int red, green, blue;
+                filePPM >> red >> green >> blue;
+                
+                int indice = (i*larguraPPM) + j;
+                this->pixels->obterElemento(indice).r = red;
+                this->pixels->obterElemento(indice).g = green;
+                this->pixels->obterElemento(indice).b = blue;
+            }
+        }
+        filePPM.close();
+        return true;
     }
 };

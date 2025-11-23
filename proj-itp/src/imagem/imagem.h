@@ -39,10 +39,10 @@ class Matriz{
         return valores[index];
     }
     
-    /*Pixel& operator[] (int index)
+    Pixel& operator[] (int index)
     {
         return valores[index];
-    }*/
+    }
 
 };
 
@@ -50,6 +50,7 @@ class Imagem{
     int largura = 0;
     int altura = 0;
     int maxCor = 0;
+    std::string ppm = "";
     Matriz *pixels = nullptr;
 
     public:
@@ -60,6 +61,8 @@ class Imagem{
     {
         largura = larg;
         altura = alt;
+        maxCor = 255;
+        ppm = "P3";
         pixels = new Matriz(larg*alt);
     }
 
@@ -90,7 +93,7 @@ class Imagem{
         pixels = new Matriz(newWidth, newHeight);
         largura = newWidth;
         altura = newHeight;
-    }
+    } 
 
     bool lerPPM(std::string arquivo)
     {
@@ -107,7 +110,12 @@ class Imagem{
             redimensionar(larguraPPM, alturaPPM);
         }
 
-        //int cont = 0;
+	if(ppm != tipoPPM)
+	{
+		ppm = tipoPPM;
+	}
+
+        int cont = 0;
         for(int i = 0; i < alturaPPM;i++)
         {
             for(int j = 0; j < larguraPPM; j++)
@@ -115,13 +123,41 @@ class Imagem{
                 int red, green, blue;
                 filePPM >> red >> green >> blue;
                 
-                int indice = (i*larguraPPM) + j;
-                this->pixels->obterElemento(indice).r = red;
-                this->pixels->obterElemento(indice).g = green;
-                this->pixels->obterElemento(indice).b = blue;
+                this->pixels->obterElemento(cont).r = red;
+                this->pixels->obterElemento(cont).g = green;
+                this->pixels->obterElemento(cont).b = blue;
+                cont++;
             }
         }
         filePPM.close();
+        return true;
+    }
+
+
+    bool salvarPPM(std::string nomeArquivo){
+        
+        std::ofstream arquivo(nomeArquivo, std::ios_base::out | std::ios_base::trunc);
+
+        if(!(arquivo.is_open())){
+            std::cerr << "Não foi possivel abrir o arquivo";
+            return false;
+        }
+
+        arquivo << ppm << std::endl;
+        arquivo << largura << " " << altura << std:: endl;
+        arquivo << maxCor << std:: endl;
+
+        int posicaoMatLin = 0;
+        for(int i = 0; i < altura; i++){
+            for(int j = 0; j < largura; j++){
+                arquivo << (*pixels)[posicaoMatLin].r << " ";
+                arquivo << (*pixels)[posicaoMatLin].g << " ";
+                arquivo << (*pixels)[posicaoMatLin].b;
+
+                arquivo << std::endl;
+                posicaoMatLin++;
+            }
+        }
         return true;
     }
 };

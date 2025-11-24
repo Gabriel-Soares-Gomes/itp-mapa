@@ -17,7 +17,7 @@ class Matriz{
     Pixel *valores;
 
     public:
-    //Matriz() = default;
+    
 
     Matriz(int l = 1, int c = 1)
     {
@@ -60,8 +60,6 @@ class Imagem{
 
     public:
 
-    Imagem() = default;
-    
     Imagem() = default;
 
     Imagem(int larg, int alt)
@@ -117,10 +115,10 @@ class Imagem{
             redimensionar(larguraPPM, alturaPPM);
         }
 
-	if(ppm != tipoPPM)
-	{
-		ppm = tipoPPM;
-	}
+		if(ppm != tipoPPM)
+		{
+			ppm = tipoPPM;
+		}
 
         int cont = 0;
         for(int i = 0; i < alturaPPM;i++)

@@ -8,13 +8,13 @@ struct Pixel{
     int r, g, b;
 };
 
-
+template <typename T >
 class Matriz{
     int linhas; //altura maximo
     int colunas; //largura maxima
 
     //criando uma "matriz" de forma linear
-    Pixel *valores;
+    T *valores;
 
     public:
     
@@ -23,7 +23,7 @@ class Matriz{
     {
         linhas = l;
         colunas = c;
-        valores = new Pixel[l*c];
+        valores = new T[l*c];
     }
 
     ~Matriz() {
@@ -34,24 +34,25 @@ class Matriz{
         return (linhas*colunas);
     }
 
-    Pixel& obterElemento(int index)
+    T& obterElemento(int index)
     {
         return valores[index];
     }
     
-    Pixel& operator[] (int index)
+    T& operator[] (int index)
     {
         return valores[index];
     }
 
 };
 
+template <typename T>
 class Imagem{
     int largura = 0;
     int altura = 0;
     int maxCor = 0;
     std::string ppm = "";
-    Matriz *pixels = nullptr;
+    Matriz<T> *pixels = nullptr;
 
     public:
 
@@ -63,7 +64,7 @@ class Imagem{
         altura = alt;
         maxCor = 255;
         ppm = "P3";
-        pixels = new Matriz(larg*alt);
+        pixels = new Matriz<T>(larg*alt);
     }
 
     ~Imagem()
@@ -81,7 +82,7 @@ class Imagem{
         return largura;
     }
 
-    Pixel& operator() (int c, int l)
+    T& operator() (int c, int l)
     {
         int indice = (l*largura)+c;
         return pixels->obterElemento(indice);
@@ -90,7 +91,7 @@ class Imagem{
     void redimensionar(int newWidth, int newHeight)
     {
         delete pixels;
-        pixels = new Matriz(newWidth, newHeight);
+        pixels = new Matriz<T>(newWidth, newHeight);
         largura = newWidth;
         altura = newHeight;
     } 

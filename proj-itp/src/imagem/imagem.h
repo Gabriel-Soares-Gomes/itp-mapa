@@ -34,6 +34,14 @@ class Matriz{
         return (linhas*colunas);
     }
 
+    int obterLargura(){
+        return colunas;
+    }
+
+    int obterAltura(){
+        return linhas;
+    }
+
     T& obterElemento(int index)
     {
         return valores[index];

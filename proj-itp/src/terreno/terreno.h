@@ -20,6 +20,16 @@ class Terreno{
         delete terreno;
     }
 
+    int& operator()(int l, int c){
+        int indice = (l*(*terreno).colunas) + c;
+    }
+
+    void matrizInicial(){
+        srand(time(0));
+        
+
+    }
+
     int obterLargura(){
         return terreno->obterLargura();
     }

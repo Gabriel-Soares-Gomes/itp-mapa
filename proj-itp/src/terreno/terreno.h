@@ -55,7 +55,7 @@ class Terreno{
         int deslocamento = (rand() % ((2*variancia) + 1)) - variancia;
 
         while(passos >= 1){
-            Diamond(passos);
+            Diamond(passos, variancia);
             Square(passos);
 
             passos /= 2;
@@ -63,7 +63,17 @@ class Terreno{
         }
     }
 
-    void Diamond(int posicao){
+    void Diamond(int passos, int variancia){
+        int media;
+        int deslocamento;
+
+        for(int linha = 0; linha < dimensao-1; linha+= 2*passos){
+            for(int coluna = 0; coluna < dimensao-1; coluna+= 2*passos){
+                media = ((*this)(linha, coluna) + (*this)(linha, coluna+2*passos) + (*this)(linha+2*passos, coluna) + (*this)(linha+2*passos, coluna+2*passos))/4;
+                deslocamento = (rand() % ((2*variancia) + 1)) - variancia;
+                (*this)(linha+passos, coluna+passos) = media + deslocamento;
+            }
+        }
     }
 
     void Square(int posicao){

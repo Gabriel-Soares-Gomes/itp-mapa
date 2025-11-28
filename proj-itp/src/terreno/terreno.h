@@ -76,9 +76,45 @@ class Terreno{
     }
 
     void Square(int passos, int variancia){
-        for(int linha = 0; linha < dimensao-1; linha += passos){
-            for(int coluna = 0; coluna < dimensao-1; coluna += passos){
-                
+        int colunaInicial;
+        int deslocamento;
+        int media;
+        
+        for(int linha = 0; linha <= dimensao-1; linha += passos){
+            //verifica se estamos na linha do ponto central.
+            if((linha%(2*passos)) == 0){
+                colunaInicial = passos; 
+            }
+            else{
+                colunaInicial = 0;
+            }
+
+
+            for(int coluna = colunaInicial; coluna <= dimensao-1; coluna += 2*passos){
+                int soma = 0;
+                int qtd = 0;
+                //verificar se os pontos estão dentro ou fora da matriz:
+                if((coluna-passos) >= 0){
+                    soma += (*this)(linha, coluna-passos);
+                    qtd++;
+                }
+                if((coluna+passos) <= (dimensao-1)){
+                    soma += (*this)(linha, coluna+passos);
+                    qtd++;
+                }
+                if((linha-passos) >= 0){
+                    soma += (*this)(linha-passos, coluna);
+                    qtd++;
+                }
+                if((linha+passos) <= (dimensao-1)){
+                    soma += (*this)(linha+passos, coluna);
+                    qtd++;
+                }
+
+                media = soma/qtd;
+                deslocamento = (rand() % ((2*variancia) + 1)) - variancia;
+
+                (*this)(linha, coluna) = media + deslocamento;
             }
         }
     }

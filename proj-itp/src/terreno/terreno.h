@@ -15,7 +15,10 @@ class Terreno{
     Terreno(int n){
         dimensao =  pow(2, n) + 1;
         terreno = new Matriz<int>(dimensao, dimensao);
-        srand(10);
+        for(int i = 0; i < (dimensao*dimensao); i++){
+            terreno->obterElemento(i) = 0;
+        }
+        //srand(10);
         matrizInicial();
     }
 
@@ -46,15 +49,25 @@ class Terreno{
     }
 
     void DiamondSquare(){
-        int passosDiamond = (dimensao-1)/2;
-        int passosSquare = 5;
-        if(passosDiamond >= 1){
-            Diamond(passosDiamond);
+        int passos = (dimensao-1)/2;
+        float rugosidade = 0.5;
+        int variancia = dimensao/2;
+        int deslocamento = (rand() % ((2*variancia) + 1)) - variancia;
+
+        while(passos >= 1){
+            Diamond(passos);
+            Square(passos);
+
+            passos /= 2;
+            rugosidade /= 2;
         }
     }
 
     void Diamond(int posicao){
-        (*this)(posicao, posicao) = 5;
+    }
+
+    void Square(int posicao){
+
     }
 
     int obterLargura(){

@@ -18,7 +18,7 @@ class Terreno{
         for(int i = 0; i < (dimensao*dimensao); i++){
             terreno->obterElemento(i) = 0;
         }
-        //srand(10);
+        srand(time(0));
         matrizInicial();
     }
 
@@ -32,10 +32,10 @@ class Terreno{
     }
 
     void matrizInicial(){
-        (*this)(0, 0) = 10; //rand() % 10; perguntar a André por que o *this.
-        (*this)(0, dimensao - 1) = 10; //rand() % 10;
-        (*this)(dimensao - 1, 0) = 10; //rand() % 10;
-        (*this)((dimensao - 1), (dimensao - 1)) = 10; //rand() % 10;
+        (*this)(0, 0) = rand() % 10; //perguntar a André por que o *this.
+        (*this)(0, dimensao - 1) = rand() % 10;
+        (*this)(dimensao - 1, 0) = rand() % 10;
+        (*this)((dimensao - 1), (dimensao - 1)) = rand() % 10;
         DiamondSquare();
     }
 
@@ -50,7 +50,7 @@ class Terreno{
 
     void DiamondSquare(){
         int passos = (dimensao-1)/2;
-        float rugosidade = 0.5;
+        const float rugosidade = 0.5;
         int variancia = dimensao/2;
 
         while(passos >= 1){
@@ -65,7 +65,7 @@ class Terreno{
     void Diamond(int passos, int variancia){
         int media;
         int deslocamento;
-        //laço percorrendo os cantos esquerdos de cada quadrado
+        //laço percorrendo os cantos esquerdos superiores de cada quadrado
         for(int linha = 0; linha < dimensao-1; linha += 2*passos){
             for(int coluna = 0; coluna < dimensao-1; coluna += 2*passos){
                 media = ((*this)(linha, coluna) + (*this)(linha, coluna+2*passos) + (*this)(linha+2*passos, coluna) + (*this)(linha+2*passos, coluna+2*passos))/4;

@@ -5,6 +5,8 @@
 #include <ctime>
 #include <cmath>
 #include <iostream>
+const float rugosidade = 0.5;
+
 
 class Terreno{
 
@@ -18,7 +20,7 @@ class Terreno{
         for(int i = 0; i < (dimensao*dimensao); i++){
             terreno->obterElemento(i) = 0;
         }
-        srand(time(0));
+        //srand(time(0));
         matrizInicial();
     }
 
@@ -50,7 +52,6 @@ class Terreno{
 
     void DiamondSquare(){
         int passos = (dimensao-1)/2;
-        const float rugosidade = 0.5;
         int variancia = dimensao/2;
 
         while(passos >= 1){

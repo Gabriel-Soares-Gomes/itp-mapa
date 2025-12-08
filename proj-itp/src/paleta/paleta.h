@@ -1,3 +1,4 @@
+#pragma once
 #include "../sequencia/sequencia.h"
 #include <fstream>
 #include <string>

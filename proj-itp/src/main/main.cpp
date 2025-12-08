@@ -1,0 +1,28 @@
+#define DOCTEST_CONFIG_IMPLEMENT
+#include "../../../doctest.h"
+#include "../terreno/terreno.h"
+#include <iostream>
+#include <string>
+using namespace std;
+
+int main(void) {
+    string filenamePaleta, filenamePPM;
+    int tamanho;
+    
+    cout << "! ----- GERADOR DE MAPA  ----- !" << '\n';
+
+    filenamePaleta = "cores.hex";
+    
+    cout << "Tamanho do mapa: ";
+    cin >> tamanho;
+
+    filenamePPM = "mapa.ppm";
+    cout << "Gerando o mapa... " << "\n";
+    
+    Paleta paleta(filenamePaleta);
+    Terreno terreno(tamanho);
+
+    terreno.normalizar();
+    terreno.geradorImagem(paleta, filenamePPM);
+    cout << "Mapa gerado!" << '\n';
+}

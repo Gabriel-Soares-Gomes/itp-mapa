@@ -34,25 +34,16 @@ class Terreno{
     }
 
     void matrizInicial(){
-        (*this)(0, 0) = rand() % 10; //perguntar a André por que o *this.
-        (*this)(0, dimensao - 1) = rand() % 10;
-        (*this)(dimensao - 1, 0) = rand() % 10;
-        (*this)((dimensao - 1), (dimensao - 1)) = rand() % 10;
+        (*this)(0, 0) = rand() % 100; //perguntar a André por que o *this.
+        (*this)(0, dimensao - 1) = rand() % 100;
+        (*this)(dimensao - 1, 0) = rand() % 100;
+        (*this)((dimensao - 1), (dimensao - 1)) = rand() % 100;
         DiamondSquare();
     }
-
-    void imprimirMatriz(){
-        for(int i = 0; i < terreno->obterAltura(); i++){
-            for(int j = 0; j < terreno->obterLargura(); j++){
-                std::cout << (*this)(i, j) << " ";
-            }
-            std::cout << std::endl;
-        }
-    }
-
+    
     void DiamondSquare(){
         int passos = (dimensao-1)/2;
-        int variancia = dimensao/2;
+        float variancia = dimensao/2;
 
         while(passos >= 1){
             Diamond(passos, variancia);
@@ -120,11 +111,109 @@ class Terreno{
         }
     }
 
+    public:
+
+    Terreno(int n){
+        dimensao =  pow(2, n) + 1;
+        terreno = new Matriz<int>(dimensao, dimensao);
+        for(int i = 0; i < (dimensao*dimensao); i++){
+            terreno->obterElemento(i) = 0;
+        }
+        srand(time(0));
+        matrizInicial();
+    }
+
+    ~Terreno() {
+        delete terreno;
+    }
+
+    int& operator()(int linha, int coluna){
+        int indice = ((linha*dimensao) + coluna);
+        return terreno->obterElemento(indice);
+    }
+
+    void imprimirMatriz(){
+        for(int i = 0; i < terreno->obterAltura(); i++){
+            for(int j = 0; j < terreno->obterLargura(); j++){
+                std::cout << (*this)(i, j) << " ";
+            }
+            std::cout << std::endl;
+        }
+    }
+
     int obterLargura(){
         return terreno->obterLargura();
     }
 
     int obterProfundidade(){
         return terreno->obterAltura();
+    }
+    
+    void normalizar() {
+        int maior = (*this)(0, 0);
+        int menor = (*this)(0, 0);
+
+        for(int i = 0; i < dimensao; i++) {
+            for(int j = 0; j < dimensao; j++) {
+                if((*this)(i,j) >= maior) maior = (*this)(i,j);
+                if((*this)(i,j) <= menor) menor = (*this)(i,j);
+            }
+        }
+
+        int novoValor;
+        float range = (float)(maior-menor);
+        for(int i = 0; i < dimensao; i++) {
+            for(int j = 0; j < dimensao; j++) {
+                if(range > 0) {
+                    novoValor = 255 * (((*this)(i,j) - menor)/range);
+                }
+                else {
+                    novoValor = 0;
+                }
+                (*this)(i,j) = novoValor;
+            }
+        }
+        //std::cout << '\n';
+    }
+    
+    void sombrear(Imagem<Cor> &img){
+        int diagonalEsquerda;
+        Cor px;
+        for(int linha = 1; linha < dimensao; linha++){
+            for(int coluna = 1; coluna < dimensao; coluna++){
+                diagonalEsquerda = (*this)(linha-1, coluna-1);
+                if(diagonalEsquerda > ((*this)(linha, coluna))){
+                    px = img(coluna, linha);
+                    px.r *= 0.8;
+                    px.g *= 0.8;
+                    px.b *= 0.8;
+
+                    img(coluna, linha) = px;
+                }
+            }
+        }
+    }
+
+    void geradorImagem(Paleta &paleta, std::string nomeImagemPPM) {
+        Imagem<Cor> img(dimensao, dimensao);
+        
+        float intervalo = (float) 256/(paleta.obterTamanho()); //256/30 = 8
+        
+        for(int i = 0; i < dimensao; i++) {
+            for(int j = 0; j < dimensao; j++) {
+                int thisCelula = (*this)(i,j);
+                Cor thisCor = paleta.obterCor(thisCelula/intervalo);
+                
+                if(thisCor.r == 0 && thisCor.g == 0 && thisCor.b == 0) {
+                    //std::cout << thisCelula << '\n';
+                } 
+                
+                img(j,i) = thisCor;
+            }
+        }
+
+        sombrear(img);
+
+        img.salvarPPM(nomeImagemPPM);
     }
 };

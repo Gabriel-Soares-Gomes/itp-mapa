@@ -153,17 +153,31 @@ class Terreno{
                 (*this)(i,j) = novoValor;
             }
         }
-        std::cout << '\n';
+        //std::cout << '\n';
     }
     
-    void sombrear(Imagem<Cor>& img) {
-        
+    void sombrear(Imagem<Cor> &img){
+        int diagonalEsquerda;
+        Cor px;
+        for(int linha = 1; linha < dimensao; linha++){
+            for(int coluna = 1; coluna < dimensao; coluna++){
+                diagonalEsquerda = (*this)(linha-1, coluna-1);
+                if(diagonalEsquerda > ((*this)(linha, coluna))){
+                    px = img(coluna, linha);
+                    px.r *= 0.8;
+                    px.g *= 0.8;
+                    px.b *= 0.8;
+
+                    img(coluna, linha) = px;
+                }
+            }
+        }
     }
 
     void geradorImagem(Paleta &paleta, std::string nomeImagemPPM) {
         Imagem<Cor> img(dimensao, dimensao);
         
-        float intervalo = 256.0/(paleta.obterTamanho()); //256/30 = 8
+        float intervalo = (float) 256/(paleta.obterTamanho()); //256/30 = 8
         
         for(int i = 0; i < dimensao; i++) {
             for(int j = 0; j < dimensao; j++) {
@@ -171,7 +185,7 @@ class Terreno{
                 Cor thisCor = paleta.obterCor(thisCelula/intervalo);
                 
                 if(thisCor.r == 0 && thisCor.g == 0 && thisCor.b == 0) {
-                    std::cout << thisCelula << '\n';
+                    //std::cout << thisCelula << '\n';
                 } 
                 
                 img(j,i) = thisCor;

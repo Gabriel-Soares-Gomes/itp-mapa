@@ -22,7 +22,7 @@ int main(void) {
     Paleta paleta(filenamePaleta);
     Terreno terreno(tamanho);
 
-
+    terreno.normalizar();
     terreno.geradorImagem(paleta, filenamePPM);
     cout << "Mapa gerado!" << '\n';
 }

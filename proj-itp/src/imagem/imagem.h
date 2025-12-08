@@ -34,21 +34,11 @@ class Matriz{
         return (linhas*colunas);
     }
 
-    int obterLargura(){
-        return colunas;
-    }
-
-    int obterAltura(){
-        return linhas;
-    }
-
     T& obterElemento(int index)
     {
         return valores[index];
     }
     
-<<<<<<< HEAD
-=======
     T& operator[] (int index)
     {
         return valores[index];
@@ -63,7 +53,6 @@ class Matriz{
     {
         return linhas;
     }
->>>>>>> c751794bcd3d050b9999e79de848f42cd83583d6
 };
 
 template <typename T>

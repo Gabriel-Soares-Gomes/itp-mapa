@@ -12,34 +12,6 @@ class Terreno{
 
     Matriz<int> *terreno;
     int dimensao;
-    public:
-
-    Terreno(int n){
-        dimensao =  pow(2, n) + 1;
-        terreno = new Matriz<int>(dimensao, dimensao);
-        for(int i = 0; i < (dimensao*dimensao); i++){
-            terreno->obterElemento(i) = 0;
-        }
-        srand(time(0));
-        matrizInicial();
-    }
-
-    ~Terreno() {
-        delete terreno;
-    }
-
-    int& operator()(int linha, int coluna){
-        int indice = ((linha*dimensao) + coluna);
-        return terreno->obterElemento(indice);
-    }
-
-    void matrizInicial(){
-        (*this)(0, 0) = rand() % 100; //perguntar a André por que o *this.
-        (*this)(0, dimensao - 1) = rand() % 100;
-        (*this)(dimensao - 1, 0) = rand() % 100;
-        (*this)((dimensao - 1), (dimensao - 1)) = rand() % 100;
-        DiamondSquare();
-    }
     
     void DiamondSquare(){
         int passos = (dimensao-1)/2;
@@ -52,6 +24,14 @@ class Terreno{
             passos /= 2;
             variancia = variancia*rugosidade;
         }
+    }
+
+    void matrizInicial(){
+        (*this)(0, 0) = rand() % 100; //perguntar a André por que o *this.
+        (*this)(0, dimensao - 1) = rand() % 100;
+        (*this)(dimensao - 1, 0) = rand() % 100;
+        (*this)((dimensao - 1), (dimensao - 1)) = rand() % 100;
+        DiamondSquare();
     }
 
     void Diamond(int passos, int variancia){
@@ -107,6 +87,24 @@ class Terreno{
                 deslocamento = (rand() % ((2*variancia) + 1)) - variancia;
 
                 (*this)(linha, coluna) = media + deslocamento;
+            }
+        }
+    }
+    
+    void sombrear(Imagem<Cor> &img){
+        int diagonalEsquerda;
+        Cor px;
+        for(int linha = 1; linha < dimensao; linha++){
+            for(int coluna = 1; coluna < dimensao; coluna++){
+                diagonalEsquerda = (*this)(linha-1, coluna-1);
+                if(diagonalEsquerda > ((*this)(linha, coluna))){
+                    px = img(coluna, linha);
+                    px.r *= 0.8;
+                    px.g *= 0.8;
+                    px.b *= 0.8;
+
+                    img(coluna, linha) = px;
+                }
             }
         }
     }
@@ -173,26 +171,9 @@ class Terreno{
                 (*this)(i,j) = novoValor;
             }
         }
-        //std::cout << '\n';
     }
     
-    void sombrear(Imagem<Cor> &img){
-        int diagonalEsquerda;
-        Cor px;
-        for(int linha = 1; linha < dimensao; linha++){
-            for(int coluna = 1; coluna < dimensao; coluna++){
-                diagonalEsquerda = (*this)(linha-1, coluna-1);
-                if(diagonalEsquerda > ((*this)(linha, coluna))){
-                    px = img(coluna, linha);
-                    px.r *= 0.8;
-                    px.g *= 0.8;
-                    px.b *= 0.8;
-
-                    img(coluna, linha) = px;
-                }
-            }
-        }
-    }
+    
 
     void geradorImagem(Paleta &paleta, std::string nomeImagemPPM) {
         Imagem<Cor> img(dimensao, dimensao);
@@ -211,9 +192,7 @@ class Terreno{
                 img(j,i) = thisCor;
             }
         }
-
         sombrear(img);
-
         img.salvarPPM(nomeImagemPPM);
     }
 };

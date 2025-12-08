@@ -11,12 +11,15 @@ int main(void) {
     
     cout << "! ----- GERADOR DE MAPA  ----- !" << '\n';
 
-    filenamePaleta = "cores.hex";
-    
+    cout << "Nome do arquivo com a paleta de cores (Insira 'cores.hex' para utilizar a paleta padrão.): " << '\n';
+    cin >> filenamePaleta;
+
     cout << "Tamanho do mapa: ";
     cin >> tamanho;
 
-    filenamePPM = "mapa.ppm";
+    cout << "Nome do arquivo da imagem: ";
+    cin >> filenamePPM;
+
     cout << "Gerando o mapa... " << "\n";
     
     Paleta paleta(filenamePaleta);

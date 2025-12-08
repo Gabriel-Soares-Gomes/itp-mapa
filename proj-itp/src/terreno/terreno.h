@@ -13,16 +13,16 @@ class Terreno{
     int dimensao;
 
     void matrizInicial(){
-        (*this)(0, 0) = rand() % 10; //perguntar a André por que o *this.
-        (*this)(0, dimensao - 1) = rand() % 10;
-        (*this)(dimensao - 1, 0) = rand() % 10;
-        (*this)((dimensao - 1), (dimensao - 1)) = rand() % 10;
+        (*this)(0, 0) = rand() % 100; //perguntar a André por que o *this.
+        (*this)(0, dimensao - 1) = rand() % 100;
+        (*this)(dimensao - 1, 0) = rand() % 100;
+        (*this)((dimensao - 1), (dimensao - 1)) = rand() % 100;
         DiamondSquare();
     }
     
     void DiamondSquare(){
         int passos = (dimensao-1)/2;
-        int variancia = dimensao/2;
+        float variancia = dimensao/2;
 
         while(passos >= 1){
             Diamond(passos, variancia);
@@ -128,15 +128,50 @@ class Terreno{
         return terreno->obterAltura();
     }
 
-    Imagem<Pixel> geradorImagem(Paleta &paleta, int tamImg) {
-        
-        int tamanho = pow(2, tamImg) + 1;
-        Imagem<Pixel> img(tamanho, tamanho);
-        
-        for(int i = 0; i < tamanho; i++) {
-            for(int j = 0; j < tamanho; j++) {
-                int celulaAtual = (*this)(i,j);
+    
+    void normalizar() {
+        int maior = (*this)(0, 0);
+        int menor = (*this)(0, 0);
+
+        for(int i = 0; i < dimensao; i++) {
+            for(int j = 0; j < dimensao; j++) {
+                if((*this)(i,i) > maior) maior = (*this)(i,j);
+                if((*this)(i,j) < menor) menor = (*this)(i,j);
             }
         }
+
+        int novoValor;
+        float range = (float)(maior-menor);
+        for(int i = 0; i < dimensao; i++) {
+            for(int j = 0; j < dimensao; j++) {
+                if(range > 0) {
+                    novoValor = 255 * (((*this)(i,j) - menor)/range);
+                }
+                else {
+                    novoValor = 0;
+                }
+                (*this)(i,j) = novoValor;
+                //std::cout << (*this)(i,j) << ' ';
+            }
+        }
+        std::cout << '\n';
+    }
+    
+    
+    void geradorImagem(Paleta &paleta, std::string nomeImagemPPM) {
+        Imagem<Cor> img(dimensao, dimensao);
+        
+        int intervalo = 255/(paleta.obterTamanho()); //256/30 = 8
+        
+        for(int i = 0; i < dimensao; i++) {
+            for(int j = 0; j < dimensao; j++) {
+                int thisCelula = (*this)(i,j);
+                
+                if (thisCelula/intervalo == 0) img(j,i) = paleta.obterCor(0);
+                if (thisCelula/intervalo == 1) img(j,i) = paleta.obterCor(1);
+                if (thisCelula/intervalo == 2) img(j,i) = paleta.obterCor(2);
+            }
+        }
+        img.salvarPPM(nomeImagemPPM);
     }
 };

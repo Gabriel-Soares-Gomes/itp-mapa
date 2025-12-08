@@ -7,10 +7,31 @@
 #include <iostream>
 const float rugosidade = 0.5;
 
+
 class Terreno{
 
     Matriz<int> *terreno;
     int dimensao;
+    public:
+
+    Terreno(int n){
+        dimensao =  pow(2, n) + 1;
+        terreno = new Matriz<int>(dimensao, dimensao);
+        for(int i = 0; i < (dimensao*dimensao); i++){
+            terreno->obterElemento(i) = 0;
+        }
+        srand(time(0));
+        matrizInicial();
+    }
+
+    ~Terreno() {
+        delete terreno;
+    }
+
+    int& operator()(int linha, int coluna){
+        int indice = ((linha*dimensao) + coluna);
+        return terreno->obterElemento(indice);
+    }
 
     void matrizInicial(){
         (*this)(0, 0) = rand() % 100; //perguntar a André por que o *this.
@@ -127,7 +148,6 @@ class Terreno{
     int obterProfundidade(){
         return terreno->obterAltura();
     }
-
     
     void normalizar() {
         int maior = (*this)(0, 0);

@@ -151,7 +151,6 @@ class Terreno{
                     novoValor = 0;
                 }
                 (*this)(i,j) = novoValor;
-                //std::cout << (*this)(i,j) << ' ';
             }
         }
         std::cout << '\n';
@@ -166,10 +165,23 @@ class Terreno{
         for(int i = 0; i < dimensao; i++) {
             for(int j = 0; j < dimensao; j++) {
                 int thisCelula = (*this)(i,j);
-                
-                if (thisCelula/intervalo == 0) img(j,i) = paleta.obterCor(0);
-                if (thisCelula/intervalo == 1) img(j,i) = paleta.obterCor(1);
-                if (thisCelula/intervalo == 2) img(j,i) = paleta.obterCor(2);
+                //Cor cor_media = {thisCelula, thisCelula, thisCelula};
+
+                if(thisCelula < 51) {
+                    img(j,i) = paleta.obterCor(0);  
+                }
+                if(thisCelula < 102 && thisCelula >= 51) {
+                    img(j,i) = paleta.obterCor(6);
+                }
+                if(thisCelula < 153 && thisCelula >=102) {
+                    img(j,i) = paleta.obterCor(12);
+                }
+                if(thisCelula < 204 && thisCelula >=153) {
+                    img(j,i) = paleta.obterCor(18);
+                }
+                else {
+                    img(j,i) = paleta.obterCor(24);
+                }
             }
         }
         img.salvarPPM(nomeImagemPPM);

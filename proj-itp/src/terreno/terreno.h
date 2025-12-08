@@ -135,8 +135,8 @@ class Terreno{
 
         for(int i = 0; i < dimensao; i++) {
             for(int j = 0; j < dimensao; j++) {
-                if((*this)(i,i) > maior) maior = (*this)(i,j);
-                if((*this)(i,j) < menor) menor = (*this)(i,j);
+                if((*this)(i,j) >= maior) maior = (*this)(i,j);
+                if((*this)(i,j) <= menor) menor = (*this)(i,j);
             }
         }
 
@@ -156,34 +156,30 @@ class Terreno{
         std::cout << '\n';
     }
     
-    
+    void sombrear(Imagem<Cor>& img) {
+        
+    }
+
     void geradorImagem(Paleta &paleta, std::string nomeImagemPPM) {
         Imagem<Cor> img(dimensao, dimensao);
         
-        int intervalo = 255/(paleta.obterTamanho()); //256/30 = 8
+        float intervalo = 256.0/(paleta.obterTamanho()); //256/30 = 8
         
         for(int i = 0; i < dimensao; i++) {
             for(int j = 0; j < dimensao; j++) {
                 int thisCelula = (*this)(i,j);
-                //Cor cor_media = {thisCelula, thisCelula, thisCelula};
-
-                if(thisCelula < 51) {
-                    img(j,i) = paleta.obterCor(0);  
-                }
-                if(thisCelula < 102 && thisCelula >= 51) {
-                    img(j,i) = paleta.obterCor(6);
-                }
-                if(thisCelula < 153 && thisCelula >=102) {
-                    img(j,i) = paleta.obterCor(12);
-                }
-                if(thisCelula < 204 && thisCelula >=153) {
-                    img(j,i) = paleta.obterCor(18);
-                }
-                else {
-                    img(j,i) = paleta.obterCor(24);
-                }
+                Cor thisCor = paleta.obterCor(thisCelula/intervalo);
+                
+                if(thisCor.r == 0 && thisCor.g == 0 && thisCor.b == 0) {
+                    std::cout << thisCelula << '\n';
+                } 
+                
+                img(j,i) = thisCor;
             }
         }
+
+        sombrear(img);
+
         img.salvarPPM(nomeImagemPPM);
     }
 };
